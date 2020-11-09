@@ -222,3 +222,29 @@ class FLOPsTable:
 
 		total_stats += self.efficiency_dict[input_size]['mobile_inverted_blocks'][0][(3, 1)]
 		return total_stats
+
+	def predict_arch_param_efficiency(self, arch_param):
+                r_list = [160, 176, 192, 208, 224]
+                e_list = [0, 3, 4, 6]
+                k_list = [0, 3, 5, 7]
+
+		total_stats = 0.
+                for r_w, r in zip(arch_param[-1], r_list):
+                        for i in range(20):
+                                ks_weights = arch_param[i][:4]
+                                e_weights = arch_param[i][4:]
+
+                                for k_i, k_w in enumerate(ks_weights):
+                                        for e_i, e_w in enumerate(e_weights):
+                                                k = k_list[k_i]
+                                                e = e_list[e_i]
+
+                                                if k == 0 or e == 0:
+                                                        total_stats += k_w*e_w*0
+                                                total_stats += r_w*self.efficiency_dict[r]["mobile_inverted_blocks"][i+1][(k, e)]*k_w*e_w
+
+                        for key in self.efficiency_dict[input_size]['other_blocks']:
+                                total_stats += self.efficiency_dict[r]['other_blocks'][key]*r_w
+
+                        total_stats += self.efficiency_dict[r]['mobile_inverted_blocks'][0][(3, 1)]*r_w
+		return total_stats

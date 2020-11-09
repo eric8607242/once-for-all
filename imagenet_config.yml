@@ -1,0 +1,100 @@
+cuda: True
+ngpu: 4
+num_workers: 16
+seed: 42
+
+log_dir: "./logs/"
+write_dir: "./logs/tb/"
+path_to_save_model: ./logs/supernet_baseline/best_model.pth
+path_to_save_generator: ./logs/supernet_baseline/best_generator.pth
+path_to_best_avg_generator: ./logs/supernet_baseline/best_avg.pth
+path_to_fianl_generator: ./logs/supernet_baseline/final.pth
+model_pretrained: ./logs/supernet_baseline/best_model.pth
+#generator_pretrained: ./logs/generator/lowest.pth
+#generator_pretrained: ./logs/best_generator.pth
+generator_pretrained: ./logs/best_avg.pth
+
+path_to_save_scratch: ./logs/supernet_baseline/best_scratch.pth
+path_to_save_architecture: ./logs/supernet_baseline/architecture.csv
+path_to_save_evaluate_architecture: ./logs/supernet_baseline/evaluate_architecture.csv
+
+path_to_backbone_pool : ./logs/supernet_baseline/backbone_pool.json
+path_to_backbone_pool_avg : ./logs/supernet_baseline/backbone_pool_avg.json
+
+path_to_new_backbone_pool : ./logs/supernet_baseline/new_backbone_pool.json
+path_to_new_backbone_pool_avg : ./logs/supernet_baseline/new_backbone_pool_avg.json
+
+path_to_generator_eval: ./logs/supernet_baseline/generator_evaluate.csv
+path_to_generator_eval_avg: ./logs/supernet_baseline/generator_evaluate_avg.csv
+path_to_supernet_eval: ./logs/supernet_baseline/supernet_evaluate.csv
+
+
+# Search epoch
+# ["singan", "convgan", "gan"]
+generator: "singan"
+hc_dim: 10
+hidden_dim: 50
+warmup_epochs: 50
+search_epochs: 0
+
+tau_decay: 0.95
+alpha: 0.0003
+loss_penalty: 1.2
+noise_weight: 0.0
+low_macs: 270
+high_macs: 450
+pool_size: 1
+#####
+
+epochs: 50
+batch_size: 1024
+print_freq: 100
+
+dataset: imagenet_lmdb
+classes: 1000
+dataset_dir: /home/jovyan/
+input_size: 224
+train_portion: 1
+mean: [0.485, 0.456, 0.406]
+std: [0.229, 0.224, 0.225]
+#mean: [0.49139968, 0.48215827, 0.44653124]
+#std: [0.2023, 0.1994, 0.2010]
+
+inplace_distill: False
+n: 2
+
+
+optim_state: !include ./optim_state.yml
+g_optim_state: !include ./g_optim_state.yml
+
+lr_scheduler: cosine
+step_size: 80
+decay_ratio: 0.1
+
+
+split_blocks: 6
+kernels_nums: 4
+expansion: 6
+#static_layers: [0, 2, 6, 10, 14, 18]
+#static_layers: [18]
+static_layers: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]
+#[max_expansion, out, kernels, stride, split_block, se]
+l_cfgs: [[6, 32,  [3, 5, 7, "skip"], 2, 4, False],
+         [6, 32,  [3, 5, 7, "skip"], 1, 4, False],
+         [6, 40,  [3, 5, 7, "skip"], 2, 4, False],
+         [6, 40,  [3, 5, 7, "skip"], 1, 4, False],
+         [6, 40,  [3, 5, 7, "skip"], 1, 4, False],
+         [6, 40,  [3, 5, 7, "skip"], 1, 4, False],
+         [6, 80,  [3, 5, 7, "skip"], 2, 4, False],
+         [6, 80,  [3, 5, 7, "skip"], 1, 4, False],
+         [6, 80,  [3, 5, 7, "skip"], 1, 4, False],
+         [6, 80,  [3, 5, 7, "skip"], 1, 4, False],
+         [6, 96,  [3, 5, 7, "skip"], 1, 4, False],
+         [6, 96,  [3, 5, 7, "skip"], 1, 4, False],
+         [6, 96,  [3, 5, 7, "skip"], 1, 4, False],
+         [6, 96,  [3, 5, 7, "skip"], 1, 4, False],
+         [6, 192, [3, 5, 7, "skip"], 2, 4, False],
+         [6, 192, [3, 5, 7, "skip"], 1, 4, False],
+         [6, 192, [3, 5, 7, "skip"], 1, 4, False],
+         [6, 192, [3, 5, 7, "skip"], 1, 4, False],
+         [6, 320, [3, 5, 7, "skip"], 1, 4, False]]

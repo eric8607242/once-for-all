@@ -3,10 +3,11 @@ import random
 from tqdm import tqdm
 import numpy as np
 
-__all__ = ['EvolutionFinder']
+__all__ = ['EvolutionFinder', "ArchManager"]
 
 
 class ArchManager:
+    # Modify: To the code generated from the architecture generator
 	def __init__(self):
 		self.num_blocks = 20
 		self.num_stages = 5
